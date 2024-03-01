@@ -72,6 +72,7 @@ Model modelLamboFrontLeftWheel;
 Model modelLamboFrontRightWheel;
 Model modelLamboRearLeftWheel;
 Model modelLamboRearRightWheel;
+
 // Dart lego
 Model modelDartLegoBody;
 Model modelDartLegoHead;
@@ -82,6 +83,10 @@ Model modelDartLegoLeftHand;
 Model modelDartLegoRightHand;
 Model modelDartLegoLeftLeg;
 Model modelDartLegoRightLeg;
+
+//Variables para Práctica 1, Ejercicio 1
+Model modelBycicle;
+Model modelSkull;
 
 GLuint textureCespedID, textureWallID, textureWindowID, textureHighwayID, textureLandingPadID;
 GLuint skyboxTextureID;
@@ -112,6 +117,8 @@ glm::mat4 modelMatrixHeli = glm::mat4(1.0f);
 glm::mat4 modelMatrixLambo = glm::mat4(1.0);
 glm::mat4 modelMatrixAircraft = glm::mat4(1.0);
 glm::mat4 modelMatrixDart = glm::mat4(1.0f);
+glm::mat4 modelMatrixSkull = glm::mat4(1.0f);
+glm::mat4 modelMatrixBycicle = glm::mat4(1.0f);
 
 float rotDartHead = 0.0, rotDartLeftArm = 0.0, rotDartLeftHand = 0.0, rotDartRightArm = 0.0, rotDartRightHand = 0.0, rotDartLeftLeg = 0.0, rotDartRightLeg = 0.0;
 int modelSelected = 0;
@@ -293,6 +300,12 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	modelDartLegoLeftLeg.setShader(&shaderMulLighting);
 	modelDartLegoRightLeg.loadModel("../models/LegoDart/LeoDart_right_leg.obj");
 	modelDartLegoRightLeg.setShader(&shaderMulLighting);
+
+	//Carga de los dos modelos Práctica 1, EJercicio 1
+	modelBycicle.loadModel("../models/bicycle/bicycle.obj");
+	modelBycicle.setShader(&shaderMulLighting);
+	modelSkull.loadModel("../models/skull/skull.obj");
+	modelSkull.setShader(&shaderMulLighting);
 
 	camera->setPosition(glm::vec3(0.0, 3.0, 4.0));
 	
@@ -500,6 +513,8 @@ void destroy() {
 	modelLamboRearRightWheel.destroy();
 	modelLamboRightDor.destroy();
 	modelRock.destroy();
+	modelBycicle.destroy();
+	modelSkull.destroy();
 
 	// Textures Delete
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -679,6 +694,10 @@ void applicationLoop() {
 	float rotWheelsY = 0.0;
 	int numberAdvance = 0;
 	int maxAdvance = 0.0;
+
+	modelMatrixSkull = glm::translate(modelMatrixSkull, glm::vec3(-10.0, 0.0, 2.0));
+
+	modelMatrixBycicle = glm::translate(modelMatrixBycicle, glm::vec3(-10.0, 0.0, 2.0));
 
 	matrixModelRock = glm::translate(matrixModelRock, glm::vec3(-3.0, 0.0, 2.0));
 
@@ -879,6 +898,8 @@ void applicationLoop() {
 		/*******************************************
 		 * Custom objects obj
 		 *******************************************/
+
+
 		//Rock render
 		modelRock.render(matrixModelRock);
 		// Forze to enable the unit texture to 0 always ----------------- IMPORTANT
@@ -886,6 +907,18 @@ void applicationLoop() {
 
 		// Render for the aircraft model
 		modelAircraft.render(modelMatrixAircraft);
+
+		//Render for the skull
+		modelSkull.setPosition(glm::vec3(-2, 0, 0));
+		modelSkull.setScale(glm::vec3(0.08, 0.08, 0.08));
+		//modelSkull.setOrientation(glm::vec3(0,45, 45));
+		modelSkull.render(modelMatrixSkull);
+		
+		//Render for the bycicle
+		modelBycicle.setPosition(glm::vec3(2,0,0));
+		modelBycicle.setScale(glm::vec3(0.02,0.02,0.02));
+		modelBycicle.setOrientation(glm::vec3(0,90,0));
+		modelBycicle.render(modelMatrixBycicle);
 
 		// Render for the eclipse car
 		glm::mat4 modelMatrixEclipseChasis = glm::mat4(modelMatrixEclipse);
